@@ -12,6 +12,7 @@ import {
   Input,
   Stack,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -32,6 +33,9 @@ const registerSchema = z.object({
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const RegisterPage = () => {
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const descriptionColor = useColorModeValue('gray.600', 'gray.300');
+
   const {
     register,
     handleSubmit,
@@ -55,10 +59,10 @@ const RegisterPage = () => {
   const onSubmit = handleSubmit((values) => mutation.mutate(values));
 
   return (
-    <Box bg="white" rounded="lg" shadow="sm" p={{ base: 6, md: 10 }}>
+    <Box bg={cardBg} rounded="lg" shadow="sm" p={{ base: 6, md: 10 }}>
       <Stack spacing={6}>
         <Heading size="lg">Create your account</Heading>
-        <Text color="gray.600">
+        <Text color={descriptionColor}>
           Enter your email and choose a strong password to create an account. We&apos;ll never share
           your details with anyone else.
         </Text>

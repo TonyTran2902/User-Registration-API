@@ -12,6 +12,7 @@ import {
   Heading,
   Input,
   Stack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
@@ -41,8 +42,10 @@ const LoginPage = () => {
     reset(values);
   };
 
+  const cardBg = useColorModeValue('white', 'gray.800');
+
   return (
-    <Box bg="white" rounded="lg" shadow="sm" p={{ base: 6, md: 10 }}>
+    <Box bg={cardBg} rounded="lg" shadow="sm" p={{ base: 6, md: 10 }}>
       <Stack spacing={6}>
         <Heading size="lg">Log in</Heading>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>

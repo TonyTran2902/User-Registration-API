@@ -9,6 +9,7 @@ import {
   Spacer,
   useColorMode,
   IconButton,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import HomePage from './pages/HomePage';
@@ -16,11 +17,13 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
 const App = () => {
+  const background = useColorModeValue('gray.50', 'gray.900');
+
   return (
     <BrowserRouter>
-      <Flex direction="column" minH="100vh">
+      <Flex direction="column" minH="100vh" bg={background}>
         <Header />
-        <Box flex="1" py={{ base: 8, md: 12 }} bg="gray.50">
+        <Box flex="1" py={{ base: 8, md: 12 }}>
           <Container maxW="lg">
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -37,9 +40,11 @@ const App = () => {
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const headerBg = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   return (
-    <Box borderBottomWidth="1px" bg="white">
+    <Box borderBottomWidth="1px" borderColor={borderColor} bg={headerBg}>
       <Container maxW="6xl">
         <Flex align="center" py={4}>
           <Heading size="md" color="teal.500">
@@ -65,17 +70,23 @@ const Header = () => {
 };
 
 const Footer = () => (
-  <Box as="footer" borderTopWidth="1px" bg="white" py={4}>
+  <Box
+    as="footer"
+    borderTopWidth="1px"
+    borderColor={useColorModeValue('gray.200', 'gray.700')}
+    bg={useColorModeValue('white', 'gray.800')}
+    py={4}
+  >
     <Container maxW="6xl">
       <Flex justify="space-between" align="center">
-        <Box fontSize="sm" color="gray.600">
+        <Box fontSize="sm" color={useColorModeValue('gray.600', 'gray.300')}>
           © {new Date().getFullYear()} AWAD User Registration Demo
         </Box>
         <HStack spacing={4} fontSize="sm">
-          <Link href="https://nestjs.com" isExternal color="teal.500">
+          <Link href="https://nestjs.com" isExternal color="teal.400">
             NestJS
           </Link>
-          <Link href="https://react.dev" isExternal color="teal.500">
+          <Link href="https://react.dev" isExternal color="teal.400">
             React
           </Link>
         </HStack>
@@ -94,8 +105,8 @@ const NavLink = ({ to, children }: NavLinkProps) => (
     as={RouterLink}
     to={to}
     fontWeight="medium"
-    color="gray.600"
-    _hover={{ textDecoration: 'none', color: 'teal.500' }}
+    color={useColorModeValue('gray.600', 'gray.300')}
+    _hover={{ textDecoration: 'none', color: 'teal.400' }}
   >
     {children}
   </Link>
