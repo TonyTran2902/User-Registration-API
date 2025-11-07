@@ -27,6 +27,18 @@ npm run start:dev
 
 The server listens on the port defined in `.env` (defaults to `3000`) and exposes REST endpoints under the prefix configured via `GLOBAL_PREFIX` (defaults to `/api`).
 
+### Database helpers
+
+Optional scripts exist under `backend/scripts/` to prep a MongoDB instance:
+
+```bash
+cd backend
+npm run db:init   # creates the user collection + indexes
+npm run db:seed   # inserts sample users (alice/bob/carol)
+```
+
+Both scripts read `MONGODB_URI` from `.env` (fallback: `mongodb://127.0.0.1:27017/awad`).
+
 ### Frontend Setup
 
 ```bash
