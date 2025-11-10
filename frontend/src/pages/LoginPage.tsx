@@ -6,15 +6,24 @@ import {
   AlertTitle,
   Box,
   Button,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  FormHelperText,
   Heading,
+  HStack,
   Input,
+  InputGroup,
+  InputRightElement,
+  Link,
   Stack,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import { Link as RouterLink } from 'react-router-dom';
 
 type LoginFormValues = {
   email: string;
@@ -23,6 +32,7 @@ type LoginFormValues = {
 
 const LoginPage = () => {
   const [status, setStatus] = useState<'idle' | 'success'>('idle');
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -42,60 +52,99 @@ const LoginPage = () => {
     reset(values);
   };
 
-  const cardBg = useColorModeValue('white', 'gray.800');
+  const tipBg = useColorModeValue('teal.50', 'rgba(45, 212, 191, 0.1)');
 
   return (
-    <Box bg={cardBg} rounded="lg" shadow="sm" p={{ base: 6, md: 10 }}>
-      <Stack spacing={6}>
-        <Heading size="lg">Log in</Heading>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <Stack spacing={4}>
-            <FormControl isInvalid={Boolean(errors.email)}>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <Input
-                id="email"
-                type="email"
-                placeholder="jane.doe@example.com"
-                {...register('email', {
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: 'Please enter a valid email address',
-                  },
-                })}
-              />
-              <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={Boolean(errors.password)}>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                {...register('password', {
-                  required: 'Password is required',
-                })}
-              />
-              <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
-            </FormControl>
-
-            <Button type="submit" colorScheme="teal" isLoading={isSubmitting}>
-              Log in
-            </Button>
+    <Stack spacing={6}>
+      <Box layerStyle="card" p={{ base: 6, md: 10 }}>
+        <Stack spacing={6}>
+          <Stack spacing={2}>
+            <Heading size="lg">Welcome back</Heading>
+            <Text color="muted">Enter your credentials to access the AWAD workspace.</Text>
           </Stack>
-        </form>
-        {status === 'success' && (
-          <Alert status="success" rounded="md">
-            <AlertIcon />
-            <Stack spacing={0}>
-              <AlertTitle>Success!</AlertTitle>
-              <AlertDescription>You are now logged in (simulation).</AlertDescription>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <Stack spacing={4}>
+              <FormControl isInvalid={Boolean(errors.email)}>
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="jane.doe@example.com"
+                  autoComplete="email"
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: 'Please enter a valid email address',
+                    },
+                  })}
+                />
+                <FormHelperText>Use the same email you used during registration.</FormHelperText>
+                <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={Boolean(errors.password)}>
+                <FormLabel htmlFor="password">Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    {...register('password', {
+                      required: 'Password is required',
+                    })}
+                  />
+                  <InputRightElement>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
+              </FormControl>
+
+              <HStack justify="space-between" align="center">
+                <Checkbox defaultChecked>Remember device</Checkbox>
+                <Link color="teal.500" fontSize="sm">Forgot password?</Link>
+              </HStack>
+
+              <Button type="submit" colorScheme="teal" isLoading={isSubmitting}>
+                Log in
+              </Button>
             </Stack>
-          </Alert>
-        )}
-      </Stack>
-    </Box>
+          </form>
+          <Box fontSize="sm" color="muted">
+            Need an account?{' '}
+            <Link as={RouterLink} to="/register" color="teal.500" fontWeight="semibold">
+              Create one here
+            </Link>
+            .
+          </Box>
+          {status === 'success' && (
+            <Alert status="success" rounded="md">
+              <AlertIcon />
+              <Stack spacing={0}>
+                <AlertTitle>Success!</AlertTitle>
+                <AlertDescription>You are now logged in (simulation).</AlertDescription>
+              </Stack>
+            </Alert>
+          )}
+        </Stack>
+      </Box>
+      <Box borderRadius="lg" borderWidth="1px" borderColor="borderSubtle" p={5} bg={tipBg}>
+        <Text fontWeight="medium">Tip</Text>
+        <Text color="muted">
+          Bookmark this page or enable two-factor authentication from your profile to keep your
+          workspace protected.
+        </Text>
+      </Box>
+    </Stack>
   );
 };
 
